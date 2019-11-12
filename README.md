@@ -1,2 +1,2 @@
-# Purdue_ML_Final_Project
-The final project of statistical machine learning at Purdue University
+# Purdue_ML_Final_Report
+Final report for Statistical Machine Learning course at Purdue University
