@@ -28,8 +28,13 @@
 
 \section{Abstract}
 
-In our last proposal report, we planned to perform link prediction on network structured data.
-By now, we have collected data and established our evaluation framework. We implemented 6 baseline models in 8 different datasets, performed data analysis and visualized our datasets. In the following two weeks, we will be focusing on implementing factorization models and state-of-the-art methods as well as further improving our current results. 
+In this report, we focus on solving link prediction problem. We should extract features for each link or we cannot use machine learning model to solve the problem. We survey three most common methods in our proposal which is heuristic method, latent feature method and subgraph sampling method.
+Due to the time limit, we implement heuristic method and latent feature method only. However, we do a very careful experiments on 8 different data sets and find some very interesting facts seldom mentioned in the paper.  Besides, we find a mistake about the result of matrix factorization in a series of paper published in KDD 2017 and NIPS 2018. We have notified the author and prevent mistakes in the future publication. Through the conversation with the authors, we think it is actually a mistake that very easy to commit if we don't pay attention to the implementation of machine learning package. In fact, the two paper have a total 80 citations and no one find this mistake. We will also illustrate this mistake in the Matrix Factorization section.
+\\ \\
+Our report will arrange in the following way. Chapter 2 is the introduction of our problem and Chapter 3 is a section of how to reproduce our result. Chapter 4 is some data analysis we've done do our data set. Chapter 4 .
+
+\section{Introduction}
+Link Prediction is a problem that 
 
 \section{How to Reproduce Our Result}
 We believe that reproducibility is very important when it comes to research. Thus, we carefully recorded all of our experiment results on Github. All the results presented in the following sections can be easily reproduced using this github repository: 
@@ -38,20 +43,7 @@ We believe that reproducibility is very important when it comes to research. Thu
 \url{https://github.com/miamiasheep/Purdue\_ML\_Course\_Project}
 \\
 \\
-\\
-To reproduce all of our result (including data analysis part), simply type the following commands: 
-\begin{lstlisting}
-python script.py
-\end{lstlisting}
-To reproduce the result of certain data sets, type the following command:
-\begin{lstlisting}
-python main.py --input [file1,file2,...] --goal [auc/f1]
-\end{lstlisting}
-To draw the graph of a network, type the following command:
-\begin{lstlisting}
-python main.py --input [file] --draw [N(Integer)]
-\end{lstlisting}
-When N is larger, the sample network will be larger.
+All of our result can be reproduced by following the instruction of README.
 
 \section{Data Analysis}
 
@@ -176,7 +168,7 @@ We also implemented f1@k score as an evaluation metric. For the parameter k, we 
 Also, something to note here is that some nodes may only exist in validation or testing set but not in training set. We discarded the pairs of nodes where at least one node is not in the training set when evaluating, i.e., We only considered pairs of which both nodes are in the training set.
 
 
-\section{Result and Discussion}
+\section{Result and Discussion of Heuristic Methods}
 \begin{table}
 	\begin{center}
 		\begin{tabular}{|c|c|c|c|c|c|c|}
@@ -225,7 +217,7 @@ Table \ref{tab:auc} shows AUC's of the six different baselines and Table \ref{ta
 According to the result above, we can see that no heuristic method can outperform all other heuristics, and that Adamic Adar(AA), Jaccard, and common neighbors perform pretty well in the Facebook and NS dataset. However, for Power and Router dataset, the results of common neighbor based methods are pretty bad. This is not surprising because in Power and Router dataset, there are so few triangles that the methods aren't able to achieve good performances. 
 \\
 \\
-To achieve a better result, we want to resort to machine learning approach in the following two weeks. Instead of designing a heuristic before actually seeing the data, we want to train our model using the existing link in the training data. The main problem of machine learning approach is to find the feature vector x for each node. We have surveyed two kinds of method in our proposal. 
+To achieve a better result, we want to resort to machine learning approach in the following two weeks. Instead of designing a heuristic before actually seeing the data, we want to train our model using the existing link in the training data. The main problem of machine learning approach is to find the feature vector for each node. We have surveyed two kinds of method in our proposal. 
 \\
 \\
 The first approach is using factorization model(a.k.a Matrix Factorization) \cite{mf}. We give each node a latent feature vector and use the inner product be the probability whether the node will have the link. This method has a great performance in recommendation problem (link prediction in biparitite graph). We want to test wheter it will have the same great performance when it comes to a much more general link prediction problem. 
@@ -254,6 +246,7 @@ However, the link prediction goal is the ranking not square error. So, we adopt 
 All of the implementation can be found in libmf\cite{libmf} and we directly use libmf in our experiment.
 
 \subsection{A Miastake Using Matrix Factorization}
+We find that we should be very carefully when apply matrix factorization to solve link prediction problem.
 When we do survey related paper, we find that some paper use the matrix factorization in the wrong way. And the mistake is still existing in a very recent NIPS paper. The paper was accepted in KDD 2017 and then submitted in NIPS 2018 uses this incorrect result and being accepted without notice the bug. We then contact the author and  find that we are the first one to find this bug. Because the paper is already cited by 50 papers, we think it might be a bug that not so easy to find. So, we want to point out this mistake in the following section and our final project presentation.   
 
 \subsection{Zero Predictions Problem}
@@ -270,7 +263,7 @@ Obviously, matrix factorzation can also solve link prediction problem that is no
 \\
 However, it is not the correct way to use matrix factorization. In fact, it will yield a very bad result especially for the graph has low average degree. 
 \\
-However, Matrix Factorization performs bad not because it is not suitable for this problem. Matrix Factorization performs bad because it predicts many zeros. Apparently, there are something going wrong. Table \ref{tab:zero} shows the percentage of zero prdictions of each data set. 
+However, Matrix Factorization performs bad not because it is not suitable for this problem. Matrix Factorization performs bad because it predicts many zeros. Apparently, there are something going wrong here. Table \ref{tab:zero} shows the percentage of zero prdictions of each data set. 
 \\
 \begin{table}
 	\begin{center}
@@ -293,6 +286,7 @@ However, Matrix Factorization performs bad not because it is not suitable for th
 	\label{tab:zero}
 \end{table}
 \\
+If we carefully see the update rule, we will find that it is a big difference 
 
 
 \subsection{Two ways to solve this problem}
@@ -306,14 +300,14 @@ The most simple way to solve the problem is to duplicate the training data. For 
 			\hline
 			Data Set & mfWrong & mfDup & Improvement(\%) \\
 			\hline
-			Celegans&0.7516&0.7893&5.02\\
-			facebook&0.9798&0.9776&-0.22\\
-			NS&0.7921&0.9181&15.91\\
-			PB&0.8655&0.8358&-3.43\\
-			Power&0.5287&0.6411&21.26\\
-			Router&0.7236&0.7972&10.17\\
-			USAir&0.8153&0.8091&-0.76\\
-			Yeast&0.9177&0.9443&2.9\\
+			Celegans,&0.7502&0.7978&6.34\\
+			facebook,&0.9797&0.9799&0.02\\
+			NS,&0.8081&0.9364&15.88\\
+			PB,&0.8675&0.8361&-3.62\\
+			Power,&0.5307&0.6985&31.62\\
+			Router,&0.7321&0.8271&12.98\\
+			USAir,&0.8183&0.8193&0.12\\
+			Yeast,&0.924&0.9557&3.43\\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -323,7 +317,7 @@ The most simple way to solve the problem is to duplicate the training data. For 
 
 \section{Ensemble Heuristics}
 
-\section{Sampling Subgraph}
+
 
 \bibliographystyle{acm}
 \bibliography{final_report}
