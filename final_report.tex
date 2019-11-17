@@ -31,7 +31,7 @@
 In this report, we focus on solving link prediction problems. The main difficulty of link prediction is to extract or generate features for each link for the machine learning algorithms to work. We surveyed several methods and categorized these methods into three categories in our proposal: heuristic method, latent feature method and subgraph sampling method.
 Due to the time limit, we haven't implemented subgraph sampling method by the time when we submitted the report. However, we've implemented heuristic method and latent feature method. Besides, we do several experiments on 8 different data sets and find several interesting facts. In addition, we find a mistake about the result of matrix factorization in a series of paper published in KDD 2017 and NIPS 2018. We have notified the author in prevention of mistakes in the future publication. Through the conversation with the authors, we find it a easily made mistake if we don't pay attention to the implementation of machine learning package. These two paper have 80 citations in total and no one found this mistake. We will point out this mistake in the Matrix Factorization section.
 \\ \\
-Our report will be arranged in the following way. Chapter 2 is the introduction of our problem and Chapter 3 is a section regarding how to reproduce our result. Chapter 4 contains some data analysis we've done on our dataset. In Chapter 5, we will talk about some simple heuristics and our evaluation methods. 
+Our report will be arranged in the following way. Section 2 is the introduction of our problem and section 3 is a section regarding how to reproduce our result. Section 4 contains some data analysis we've done on our dataset. In section 5 to section 6, we will talk about some simple heuristics and our evaluation methods. In section 7, we will use logistic regression and random forest to enesmble the heuristic model. In section 8, we apply matrix factorization factorization model to link prediction problem and point out mistakes that made in two paper. In section 9, we summarize all the interesting finding and make our conclusion.
 
 \section{Introduction to Link Prediction Problem}
 Link prediction is a task to predict whether there will be an edge between two nodes. Link prediction is actually very different from a usual machine learning task by the following three characteristics:
@@ -45,11 +45,11 @@ Link prediction is a task to predict whether there will be an edge between two n
 The first characteristics is seldom encountered in machine learning problems, which makes link prediction very unique.  \\
 To make link prediction a machine learning problem. There are three ways to generate (or learn) feature vector. \\
 1. Heuristic \\ 
-This is the most simple way, but it is actually a very effective way. And there are some very famous heuristic such as common neighbors, Katz similarity, Preferentail Attachment, ... etc.  We will discuss this method from chapter 5 to chapter 7. \\ \\
+This is the most simple way, but it is actually a very effective way. And there are some very famous heuristic such as common neighbors, Katz similarity, Preferentail Attachment, ... etc.  We will discuss this method from section 5 to section 7. \\ \\
 2. Latent Feature Method \\
 This method is to use factorization model(a.k.a Matrix Factorization) \cite{mf}. We give each node a latent feature vector and use the inner product be the probability whether the node will have the link. This method has a great performance in recommendation problem (link prediction in biparitite graph). We want to test whether it will have the same great performance when it comes to a much more general link prediction problem. 
 \\
-We will discuss this method in Chapter 8.
+We will discuss this method in section 8.
 \\ \\
 3. Subgraph Sampling Method \\ 
 Subgraph Sampling approach is to sample a set of subgraph and enumerate all the nodes in each subgraph. As a result, the adjacency matrix in each subgraph of these subgraph can be the feature vector for machine learning approach. In fact, there are two recent works proposed in KDD 2017 \cite{lp2017} and NIPS 2018 \cite{lp2018} using this method. 
@@ -143,9 +143,9 @@ By visualizing our data sets, we can see that the characteristic of each data is
 	\caption{Router}
 	\label{fig:Router}
 \end{figure}
-\section{Evaluation and Result}
+\section{Heurist Method and Evaluation}
 
-\subsection{Baselines}
+\subsection{Heuristic}
 For the following sections, we denote x and y as two nodes, between which we want to predict if there is a link. And we denote the set of neighbors of x as N(x). We implemented six very common heuristics. And in table \ref{tab:method}, we organized the formulas of the six heuristics. \\
 \subsubsection{Common Neighbors(CN)}
 It is a very simple heuristic. The intuition is that the more common neighbors the two nodes have, the more likely that there is a link between them. The score can be calculated as $|N(x) \cap N(y)|$.
@@ -398,8 +398,8 @@ However, Matrix Factorization performs bad not because it is not suitable for th
 	\caption{zero predictions in each data set}
 	\label{tab:zero}
 \end{table}
-\subsection {Update Rules of Matrix Factorization}
-
+\subsection {Implementation of libMF}
+To figure out why zero predictions problem happen, we read thr source code of one of famous matrix factorization package "libMF". We find that the 
 
 \subsection{Two ways to solve this problem}
 
@@ -445,12 +445,16 @@ If we see the performance of Preferential Attachment(PA) in PB data set, the res
 \subsubsection{Factorize Into One Matrix}
 We don't have to factorize the matrix into two matrices which will yield lots of unnecessary parameters. We can change the optimization into the following form in equaition \ref{eq:single}. Due to the time limit, we are not finished this part but we are still working on this.
 \begin{equation}
-\min_{P,Q} \sum_{(u,i,j)\in D_s}\log(1+e^{-P_u(P_i^T - P_j^T)})
+\min_{P} \sum_{(u,i,j)\in D_s}\log(1+e^{-P_u(P_i^T - P_j^T)})
 \label{eq:single}
 \end{equation}
 
 \section{Conclusion}
-In this report, we reimplement and apply it into several data sets. 
+In this report, we reimplement several models aims at dealing with link prediction problem and apply these models into several data sets. And we actually find some interesting finding that I want to summarize in this section.
+
+\subsection{}
+
+\subsection{} 
 
 
 \bibliographystyle{acm}
