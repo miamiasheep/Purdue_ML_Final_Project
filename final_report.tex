@@ -29,28 +29,34 @@
 \section{Abstract}
 
 In this report, we focus on solving link prediction problem. The core problem of link prediction is to extract or learn features for each link or we cannot use machine learning model to solve the problem. We survey several methods and categorize these methods into three categories in our proposal which is heuristic method, latent feature method and subgraph sampling method.
-Due to the time limit, we implement heuristic method and latent feature method only. However, we do a very careful experiments on 8 different data sets and find some very interesting facts seldom mentioned in the paper.  Besides, we find a mistake about the result of matrix factorization in a series of paper published in KDD 2017 and NIPS 2018. We have notified the author and prevent mistakes in the future publication. Through the conversation with the authors, we think it is actually a mistake that very easy to commit if we don't pay attention to the implementation of machine learning package. In fact, the two paper have a total 80 citations and no one find this mistake. We will also illustrate this mistake in the Matrix Factorization section.
+Due to the time limit, we haven't implemented subgraph sampling method when we submitted the report. However, we've implemented heuristic method and latent feature method. Besides, we do a very careful experiments on 8 different data sets and find some very interesting facts seldom mentioned in the paper.  We also find a mistake about the result of matrix factorization in a series of paper published in KDD 2017 and NIPS 2018. We have notified the author and prevent mistakes in the future publication. Through the conversation with the authors, we think it is actually a mistake that very easy to commit if we don't pay attention to the implementation of machine learning package. In fact, the two paper have a total 80 citations and no one find this mistake. We will also illustrate this mistake in the Matrix Factorization section.
 \\ \\
-Our report will arrange in the following way. Chapter 2 is the introduction of our problem and Chapter 3 is a section of how to reproduce our result. Chapter 4 is some data analysis we've done do our data set. Chapter 4 .
+Our report will arrange in the following way. Chapter 2 is the introduction of our problem and Chapter 3 is a section of how to reproduce our result. Chapter 4 is some data analysis we've done do our data set. In Chapter 5, we wlll talk about some simple heuristic and our evaluation method. 
 
 \section{Introduction to Link Prediction Problem}
 Link prediction is a task to predict whether there will be an edge between two nodes. Link prediction is actually very different from an usaual machine learning task by the following three characteristics:
-\\
+\\ \\
 1. We don't have any feature vector predefined in our graph. 
-\\
+\\ \\
 2. Link prediction is a ranking problem.
-\\
+\\ \\
 3. The positive data is much more than the negative data. 
-\\ 
+\\  \\
 The first characteristics is seldom encounted when we face other machine learning problem which makes link prediction very unique.  \\
 To make link prediction a machine learning problem. There are three ways to generate(or learn) feature vector. \\
-1. Heuristic \\
-This is the most simple way, but it is actually a very effective way. And there are some very famous heuristic such as common neighbors, Katz similarity, Preferentail Attachment, ... etc.  We will discuss this method from chapter 5 to chapter 6. \\
+1. Heuristic \\ 
+This is the most simple way, but it is actually a very effective way. And there are some very famous heuristic such as common neighbors, Katz similarity, Preferentail Attachment, ... etc.  We will discuss this method from chapter 5 to chapter 7. \\ \\
 2. Latent Feature Method \\
-
-
-3. Subgraph Sampling Method \\
-To illustrate the idea of subgraph sampling, let us draw an example in Figure X. 
+This method is to use factorization model(a.k.a Matrix Factorization) \cite{mf}. We give each node a latent feature vector and use the inner product be the probability whether the node will have the link. This method has a great performance in recommendation problem (link prediction in biparitite graph). We want to test wheter it will have the same great performance when it comes to a much more general link prediction problem. 
+\\
+We will discuss this method in Chapter 8.
+\\ \\
+3. Subgraph Sampling Method \\ 
+Subgraph Sampling approach is to sample a set of subgraph and enumerate all the nodes in each subgraph. As a result, the adjacency matrix in each subgraph of these subgraph can be the feature vector for machine learning approach. In fact, there are two recent works proposed in KDD 2017 \cite{lp2017} and NIPS 2018 \cite{lp2018} using this method. 
+\\ 
+To illustrate the idea of subgraph sampling, let us draw an example in Figure X.
+\\
+The second and third characteristic actually will let link prediction need to have an unique way to evaluate model and we will discuss this in Chapter 5.2. 
 
 \section{How to Reproduce Our Result}
 We believe that reproducibility is very important when it comes to research. Thus, we carefully recorded all of our experiment results on Github. All the results presented in the following sections can be easily reproduced using this github repository: 
@@ -233,13 +239,7 @@ Table \ref{tab:auc} shows AUC's of the six different baselines and Table \ref{ta
 According to the result above, we can see that no heuristic method can outperform all other heuristics, and that Adamic Adar(AA), Jaccard, and common neighbors perform pretty well in the Facebook and NS dataset. However, for Power and Router dataset, the results of common neighbor based methods are pretty bad. This is not surprising because in Power and Router dataset, there are so few triangles that the methods aren't able to achieve good performances. 
 \\
 \\
-To achieve a better result, we want to resort to machine learning approach in the following two weeks. Instead of designing a heuristic before actually seeing the data, we want to train our model using the existing link in the training data. The main problem of machine learning approach is to find the feature vector for each node. We have surveyed two kinds of method in our proposal. 
-\\
-\\
-The first approach is using factorization model(a.k.a Matrix Factorization) \cite{mf}. We give each node a latent feature vector and use the inner product be the probability whether the node will have the link. This method has a great performance in recommendation problem (link prediction in biparitite graph). We want to test wheter it will have the same great performance when it comes to a much more general link prediction problem. 
-\\
-\\
-The second approach is to sample a set of subgraph and enumerate all the nodes in each subgraph. As a result, the adjacency matrix in each subgraph of these subgraph can be the feature vector for machine learning approach. In fact, there are two recent works proposed in KDD 2017 \cite{lp2017} and NIPS 2018 \cite{lp2018} using this method. 
+To achieve a better result, we want to resort to machine learning approach. Instead of designing a heuristic before actually seeing the data, we want to train our model using the existing link in the training data. The main problem of machine learning approach is to find the feature vector for each node. 
 
 \section{Matrix Factorization}
 
@@ -305,6 +305,9 @@ However, Matrix Factorization performs bad not because it is not suitable for th
 If we carefully see the update rule, we will find that it is a big difference 
 
 
+\subsection {Update Rules of Matrix Factorization}
+
+
 \subsection{Two ways to solve this problem}
 
 \subsubsection{Duplicate data}
@@ -316,14 +319,14 @@ The most simple way to solve the problem is to duplicate the training data. For 
 			\hline
 			Data Set & mfWrong & mfDup & Improvement(\%) \\
 			\hline
-			Celegans,&0.7502&0.7978&6.34\\
-			facebook,&0.9797&0.9799&0.02\\
-			NS,&0.8081&0.9364&15.88\\
-			PB,&0.8675&0.8361&-3.62\\
-			Power,&0.5307&0.6985&31.62\\
-			Router,&0.7321&0.8271&12.98\\
-			USAir,&0.8183&0.8193&0.12\\
-			Yeast,&0.924&0.9557&3.43\\
+			Celegans&0.7502&0.7978&6.34\\
+			facebook&0.9797&0.9799&0.02\\
+			NS&0.8081&0.9364&15.88\\
+			PB&0.8675&0.8361&-3.62\\
+			Power&0.5307&0.6985&31.62\\
+			Router&0.7321&0.8271&12.98\\
+			USAir&0.8183&0.8193&0.12\\
+			Yeast&0.924&0.9557&3.43\\
 			\hline
 		\end{tabular}
 	\end{center}
