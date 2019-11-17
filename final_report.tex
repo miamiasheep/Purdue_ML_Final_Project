@@ -60,7 +60,7 @@ The second and third characteristic actually will let link prediction need to ha
 \\
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.3]{subgraph_sampling_approach}
+	\includegraphics[scale=0.5]{subgraph_sampling_approach}
 	\caption{subgraph sampling method}
 	\label{fig:subsample}
 \end{figure}
@@ -191,7 +191,7 @@ Second, we randomly sampled negative samples for validation and testing set. The
 Third, we train the models using training set, and tuned our model using validation set, and evaluate the models to our testing set. The higher score a pair gets, the higher the ranking it is and the more possible that there would be a link between them. For evaluation, we used the ranking metrics. We mainly used AUC-ROC score (area under Receiver Operating Characteristics curve, abbreviated to AUC here). AUC has a very good characteristic that the sampling AUC is actually an approximation of actual AUC even if we do down-sampling. 
 \\
 \\
-We also implemented f1@k score as an evaluation metric. For the parameter k, we tentatively set the k equal to the size of positive samples. For this k, recall is actually equal to precision. And f1@k thus has a very intuitive physical meaning: the accuracy of finding all of the missing links given the size of missing links. In the future, we'll try to set different k's and see the influence of them. 
+We also implemented f1@k score as an evaluation metric. For the parameter k, we set the k equal to the size of positive samples. For this k, recall is actually equal to precision. And f1@k thus has a very intuitive physical meaning: the accuracy of finding all of the missing links given the size of missing links. In the future, we'll try to set different k's and see the influence of them. 
 \\
 \\
 Also, something to note here is that some nodes may only exist in validation or testing set but not in training set. We discarded the pairs of nodes where at least one node is not in the training set when evaluating, i.e., We only considered pairs of which both nodes are in the training set.
