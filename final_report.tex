@@ -268,6 +268,69 @@ To achieve a better result, we want to resort to machine learning approach. Inst
 	\label{tab:precision@50}
 \end{table}
 
+
+
+\section{Ensemble Heuristics (Machine Learning Approach)}
+
+In this section, we present the process and the results of using the machine learning approach. 
+\\
+\\
+First, we sampled the training set and testing set. We made both the sets class-balanced, which implied that half the pairs have links, and that the other half don't. And as we mentioned above, the features of a instance in the datasets are the heuristics generated using the heuristics method. And the label of the instance is either 1 or 0, meaning whether there is a link between the pair. We formulated it as a classification problem, but as for the prediction, we predicted the probabilities but not the labels. 
+\\
+\\
+Second, we employed logistic regression and randomforest for the problem. We used grid search and 3-fold cross validation to find the best parameters for the models.
+\\
+\\
+Third, we built the models with the best parameters for the testing set. We then got the probability of whether there is a link for each pair. One can see the probability as a score, just as what we obtained when using heuristics methods. The higher the score, the higher the ranking it gets. For now, we can employed AUC and F1 to inspect the model performance. Table \ref{tab:ensemble_auc} and Table \ref{tab:ensemble_f1} show the results.
+\\
+\\
+One can compare the results to those of the heuristics methods and find that the machine learning approach overall doesn't really outperform the heuristics methods. We think that it may be due to the fact that the machine learning approach tends to recommend higher order links, which may not be a good case for the dataset. Besides, we can see that the heuristics method already performed very well, especially the Random Walk with Restart (RWR) method. In fact, our randomforest models also suggested that RWR is the most important feature for almost every dataset. But still, machine learning approach has its own value. For the Router dataset, RWR doesn't seem to be a good method. This is where machine learning approach comes into play. It may be more robust and may be less dataset-variant. For the future work, we are interested in generating more heuristic features for the machine learning models and imposed some constraints on the models for better performance. 
+
+
+\begin{table}
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|c|c|c|}
+			\hline
+			Data Set & RF & LogisticRegression \\
+			\hline
+			Celegans&0.8292&0.8697\\
+			facebook&0.9829&0.9866\\
+			NS&0.9925&0.9898\\
+			PB&0.9103&0.9270\\
+			Power&0.5923&0.5029\\
+			Router&0.9208&0.7591\\
+			USAir&0.9377&0.9476\\
+			Yeast&0.9652&0.9702\\
+			\hline
+		\end{tabular}
+	\end{center}
+	\caption{AUC of the machine learning models}
+	\label{tab:ensemble_auc}
+\end{table}
+
+
+\begin{table}
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|c|c|c|}
+			\hline
+			Data Set & RF & LogisticRegression \\
+			\hline
+			Celegans&0.7870&0.8101\\
+			facebook&0.9691&0.9647\\
+			NS&0.9826&0.9870\\
+			PB&0.8529&0.8632\\
+			Power&0.4933&0.4314\\
+			Router&0.7794&0.7095\\
+			USAir&0.8995&0.9043\\
+			Yeast&0.9258&0.9338\\
+			\hline
+		\end{tabular}
+	\end{center}
+	\caption{F1 of the machine learning models}
+	\label{tab:ensemble_f1}
+\end{table}
+
+
 \section{Matrix Factorization}
 
 In this section, we try to apply Matrix Factorization to link prediction. Matrix Factorization works by decomposing user-item interaction matrix into the product of two lower dimensionality of rectangular matrices. It is very popular in recommendation system problem. Let the user-item interaction be the matrix R. And the first matrix be P and the second matrix be Q.  
