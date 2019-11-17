@@ -243,10 +243,30 @@ Also, something to note here is that some nodes may only exist in validation or 
 Table \ref{tab:auc} shows AUC's of the six different baselines and Table \ref{tab:f1} shows the F1 scores.
 \\
 \\
-According to the result above, we can see that no heuristic method can outperform all other heuristics, and that Adamic Adar(AA), Jaccard, and common neighbors perform pretty well in the Facebook and NS dataset. However, for Power and Router dataset, the results of common neighbor based methods are pretty bad. This is not surprising because in Power and Router dataset, there are so few triangles that the methods aren't able to achieve good performances. 
+According to the result above, we can see that no heuristic method can outperform all other heuristics, and that Adamic Adar(AA), Jaccard, and common neighbors perform pretty well in the Facebook and NS dataset. However, for Power and Router dataset, the results of common neighbor based methods are pretty bad. At first, we think the reason AA, Jaccard and common neighbors perform so bad because these three heuristic are not suitable for Power and Router data set. However, when we carefully anayze the predictions, we find AA, Jaccard and common neighbor is actually very good. The reason the performs bad in AUC and F1@(sample size) is because these data has a low average degree so there are many predictions are zero. When we see the result of precision@50, we will find that common neighbor, AA and Jaccard are actually very good in this evaluation.
 \\
 \\
 To achieve a better result, we want to resort to machine learning approach. Instead of designing a heuristic before actually seeing the data, we want to train our model using the existing link in the training data. The main problem of machine learning approach is to find the feature vector for each node. 
+\begin{table}
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+			\hline
+			Data Set & CN & JAC & AA & PA & TN & PG & RWR & Katz \\
+			\hline
+			Celegans&0.98&0.62&0.98&0.84&0.8&0.56&0.3&0.2\\
+			facebook&1.0&0.92&1.0&0.76&0.8&0.44&0.86&0.52\\
+			NS&1.0&1.0&1.0&0.6&0.38&0.4&0.86&1.0\\
+			PB&0.98&0.72&0.94&0.84&0.64&0.76&0.58&0.32\\
+			Power&1.0&1.0&1.0&0.44&0.36&0.26&1.0&1.0\\
+			Router&0.98&0.92&0.94&0.96&0.6&0.64&0.86&1.0\\
+			USAir&1.0&0.84&1.0&1.0&0.8&0.76&0.44&0.52\\
+			Yeast&1.0&0.96&1.0&1.0&0.9&0.92&0.92&1.0\\
+			\hline
+		\end{tabular}
+	\end{center}
+	\caption{precision@50 of the six baselines}
+	\label{tab:precision@50}
+\end{table}
 
 \section{Matrix Factorization}
 
@@ -270,19 +290,18 @@ All of the implementation can be found in libmf\cite{libmf} and we directly use 
 
 \subsection{A Miastake Using Matrix Factorization}
 We find that we should be very carefully when apply matrix factorization to solve link prediction problem.
-When we do survey related paper, we find that some paper use the matrix factorization in the wrong way. And the mistake is still existing in a very recent NIPS paper. The paper was accepted in KDD 2017 and then submitted in NIPS 2018 uses this incorrect result and being accepted without notice the bug. We then contact the author and  find that we are the first one to find this bug. Because the paper is already cited by 50 papers, we think it might be a bug that not so easy to find. So, we want to point out this mistake in the following section and our final project presentation.   
+When we survey related paper, we find that some paper use the matrix factorization in the wrong way. And the mistake is still existing in a very recent NIPS paper. The paper was accepted in KDD 2017 and then submitted in NIPS 2018 uses this incorrect result and being accepted without notice the bug. We then contact the author and  find that we are the first one to find this bug. Because the paper is already cited by 50 papers, we think it might be a bug that not so easy to find. So, we want to point out this mistake in the following section and our final project presentation.   
 
 \subsection{Zero Predictions Problem}
 Matrix Factorization is very popular in solving recommendation problem which can be one of link prediction problem. The only difference is that recommendation problem focus on the bipartite graph. 
 \\
-Obviously, matrix factorzation can also solve link prediction problem that is not bipartite. The most intuitive way to do this is: 
-\\
-1. Read all the edges to form the tuple in set O.
-\\
-2. Apply MF library and get the MF model.
-\\
-3. Generate predictions using this MF model.
-\\
+Obviously, matrix factorzation can also solve link prediction problem that is not bipartite. The most intuitive way to directly input the edges of the graph into matrix factorization model. Just like what the Figure \ref{fig:wrong_mf}. 
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.5]{wrong_mf_example}
+	\caption{wrong usage of matrix factorization}
+	\label{fig:wrong_mf}
+\end{figure}
 \\
 However, it is not the correct way to use matrix factorization. In fact, it will yield a very bad result especially for the graph has low average degree. 
 \\
@@ -308,7 +327,6 @@ However, Matrix Factorization performs bad not because it is not suitable for th
 	\caption{zero predictions in each data set}
 	\label{tab:zero}
 \end{table}
-
 \subsection {Update Rules of Matrix Factorization}
 
 
