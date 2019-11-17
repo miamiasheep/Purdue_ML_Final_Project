@@ -29,7 +29,7 @@
 \section{Abstract}
 
 In this report, we focus on solving link prediction problem. The core problem of link prediction is to extract or learn features for each link or we cannot use machine learning model to solve the problem. We survey several methods and categorize these methods into three categories in our proposal which is heuristic method, latent feature method and subgraph sampling method.
-Due to the time limit, we haven't implemented subgraph sampling method when we submitted the report. However, we've implemented heuristic method and latent feature method. Besides, we do a very careful experiments on 8 different data sets and find some very interesting facts seldom mentioned in the paper.  We also find a mistake about the result of matrix factorization in a series of paper published in KDD 2017 and NIPS 2018. We have notified the author and prevent mistakes in the future publication. Through the conversation with the authors, we think it is actually a mistake that very easy to commit if we don't pay attention to the implementation of machine learning package. In fact, the two paper have a total 80 citations and no one find this mistake. We will also illustrate this mistake in the Matrix Factorization section.
+Due to the time limit, we haven't implemented subgraph sampling method when we submitted the report. However, we've implemented heuristic method and latent feature method. Besides, we do several experiments on 8 different data sets and find several interesting facts. In addition, we find a mistake about the result of matrix factorization in a series of paper published in KDD 2017 and NIPS 2018. We have notified the author and prevent mistakes in the future publication. Through the conversation with the authors, we think it is actually a mistake that very easy to commit if we don't pay attention to the implementation of machine learning package. In fact, these two paper have a total 80 citations and no one find this mistake. We will point out this mistake in the Matrix Factorization section.
 \\ \\
 Our report will arrange in the following way. Chapter 2 is the introduction of our problem and Chapter 3 is a section of how to reproduce our result. Chapter 4 is some data analysis we've done do our data set. In Chapter 5, we wlll talk about some simple heuristic and our evaluation method. 
 
@@ -333,13 +333,23 @@ However, Matrix Factorization performs bad not because it is not suitable for th
 \subsection{Two ways to solve this problem}
 
 \subsubsection{Duplicate data}
-The most simple way to solve the problem is to duplicate the training data. For each edge (x,y), we create a new edge (y,x) in the training set. It will solve the problem. Table \ref{tab:dup} shows the improvement of doing this modification. We can see that it helps a lot for low degree graph. For Power data set, there is about 30\% improvement. 
+The most simple way to solve the problem is to duplicate the training data. For each edge (x,y), we create a new edge (y,x) in the training set (Discribe in Figure \ref{fig:dup_mf}). It will solve the zero predictions problem. 
+\\
+Although it seems to be a small modification, it will lead a significant improvement in most of the data set.
+Table \ref{tab:dup} shows the improvement of doing this modification. MfWrong column is the result of wrong matrix factorization method and MfDup is the result of the matrix factorization using duplicate data. We can see that it helps a lot for low degree graph. 
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.5]{dup_mf}
+	\caption{fix problems by duplicating data}
+	\label{fig:dup_mf}
+\end{figure}
 
 \begin{table}
 	\begin{center}
 		\begin{tabular}{|c|c|c|c|}
 			\hline
-			Data Set & mfWrong & mfDup & Improvement(\%) \\
+			Data Set & MfWrong & MfDup & Improvement(\%) \\
 			\hline
 			Celegans&0.7502&0.7978&6.34\\
 			facebook&0.9797&0.9799&0.02\\
@@ -352,14 +362,13 @@ The most simple way to solve the problem is to duplicate the training data. For 
 			\hline
 		\end{tabular}
 	\end{center}
-	\caption{zero predictions in each data set}
+	\caption{Comparison with MfWrong and MfDup}
 	\label{tab:dup}
 \end{table}
 
-
-
+\subsubsection{Factorize Into One Matrix}
 \bibliographystyle{acm}
 \bibliography{final_report}
-	
+
 	
 \end{document}
