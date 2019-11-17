@@ -54,9 +54,16 @@ We will discuss this method in Chapter 8.
 3. Subgraph Sampling Method \\ 
 Subgraph Sampling approach is to sample a set of subgraph and enumerate all the nodes in each subgraph. As a result, the adjacency matrix in each subgraph of these subgraph can be the feature vector for machine learning approach. In fact, there are two recent works proposed in KDD 2017 \cite{lp2017} and NIPS 2018 \cite{lp2018} using this method. 
 \\ 
-To illustrate the idea of subgraph sampling, let us draw an example in Figure X.
+To illustrate the idea of subgraph sampling, let us draw an example in Figure \ref{fig:subsample}. 
 \\
 The second and third characteristic actually will let link prediction need to have an unique way to evaluate model and we will discuss this in Chapter 5.2. 
+\\
+\begin{figure}[h]
+	\centering
+	\includegraphics[scale=0.3]{subgraph_sampling_approach}
+	\caption{subgraph sampling method}
+	\label{fig:subsample}
+\end{figure}
 
 \section{How to Reproduce Our Result}
 We believe that reproducibility is very important when it comes to research. Thus, we carefully recorded all of our experiment results on Github. All the results presented in the following sections can be easily reproduced using this github repository: 
@@ -301,9 +308,6 @@ However, Matrix Factorization performs bad not because it is not suitable for th
 	\caption{zero predictions in each data set}
 	\label{tab:zero}
 \end{table}
-\\
-If we carefully see the update rule, we will find that it is a big difference 
-
 
 \subsection {Update Rules of Matrix Factorization}
 
