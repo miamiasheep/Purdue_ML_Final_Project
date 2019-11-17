@@ -338,6 +338,8 @@ The most simple way to solve the problem is to duplicate the training data. For 
 Although it seems to be a small modification, it will lead a significant improvement in most of the data set.
 Table \ref{tab:dup} shows the improvement of doing this modification. MfWrong column is the result of wrong matrix factorization method and MfDup is the result of the matrix factorization using duplicate data. We can see that it helps a lot for low degree graph. 
 
+Interestingly enough, PB data set actually has a negative improvement. We see the predictions of the two MF and find that the ranking of the predictions are almost the same and the only difference is the predictions that WrongMF predict zero. We are still investigating on this problem. We cureently think the reason might be that MF in PB performs really bad when there are only a few existing link in the training set. Instead of making a prediction, directly set to zero might be better. 
+
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.5]{dup_mf}
@@ -367,6 +369,16 @@ Table \ref{tab:dup} shows the improvement of doing this modification. MfWrong co
 \end{table}
 
 \subsubsection{Factorize Into One Matrix}
+We don't have to factorize the matrix into two matrices which will yield lots of unnecessary parameters. We can change the optimization into the following form in equaition \ref{eq:single}. Due to the time limit, we are not finished this part but we are still working on this.
+\begin{equation}
+\min_{P,Q} \sum_{(u,i,j)\in D_s}\log(1+e^{-P_u(P_i^T - P_j^T)})
+\label{eq:single}
+\end{equation}
+
+\section{Conclusion}
+In this report, we reimplement and apply it into several data sets. 
+
+
 \bibliographystyle{acm}
 \bibliography{final_report}
 
