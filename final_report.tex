@@ -28,13 +28,21 @@
 
 \section{Abstract}
 
-In this report, we focus on solving link prediction problem. We should extract features for each link or we cannot use machine learning model to solve the problem. We survey three most common methods in our proposal which is heuristic method, latent feature method and subgraph sampling method.
+In this report, we focus on solving link prediction problem. The core problem of link prediction is to extract or learn features for each link or we cannot use machine learning model to solve the problem. We survey three most common methods in our proposal which is heuristic method, latent feature method and subgraph sampling method.
 Due to the time limit, we implement heuristic method and latent feature method only. However, we do a very careful experiments on 8 different data sets and find some very interesting facts seldom mentioned in the paper.  Besides, we find a mistake about the result of matrix factorization in a series of paper published in KDD 2017 and NIPS 2018. We have notified the author and prevent mistakes in the future publication. Through the conversation with the authors, we think it is actually a mistake that very easy to commit if we don't pay attention to the implementation of machine learning package. In fact, the two paper have a total 80 citations and no one find this mistake. We will also illustrate this mistake in the Matrix Factorization section.
 \\ \\
 Our report will arrange in the following way. Chapter 2 is the introduction of our problem and Chapter 3 is a section of how to reproduce our result. Chapter 4 is some data analysis we've done do our data set. Chapter 4 .
 
-\section{Introduction}
-Link Prediction is a problem that 
+\section{Introduction}.
+Link prediction is a task to predict whether there will be an edge between two nodes. Link prediction is actually very different from an usaual machine learning task by the following three characteristics:
+\\
+1. We don't have any feature vector predefined in our graph. 
+\\
+2. Link prediction is a ranking problem.
+\\
+3. The positive data is much more than the negative data. 
+\\ 
+The first characteristics is seldom encounted when we face other machine learning problem which makes link prediction very unique. 
 
 \section{How to Reproduce Our Result}
 We believe that reproducibility is very important when it comes to research. Thus, we carefully recorded all of our experiment results on Github. All the results presented in the following sections can be easily reproduced using this github repository: 
@@ -43,7 +51,7 @@ We believe that reproducibility is very important when it comes to research. Thu
 \url{https://github.com/miamiasheep/Purdue\_ML\_Course\_Project}
 \\
 \\
-All of our result can be reproduced by following the instruction of README.
+And all of our experiements can be reproduced by following the instruction of README. If you have any problems of reproducing the experiments, please feel free to contact me by posting an issue or sending me an email at lee3388@purude.edu.
 
 \section{Data Analysis}
 
