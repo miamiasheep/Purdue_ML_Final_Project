@@ -28,26 +28,26 @@
 
 \section{Abstract}
 
-In this report, we focus on solving link prediction problem. The core problem of link prediction is to extract or learn features for each link or we cannot use machine learning model to solve the problem. We survey several methods and categorize these methods into three categories in our proposal which is heuristic method, latent feature method and subgraph sampling method.
-Due to the time limit, we haven't implemented subgraph sampling method when we submitted the report. However, we've implemented heuristic method and latent feature method. Besides, we do several experiments on 8 different data sets and find several interesting facts. In addition, we find a mistake about the result of matrix factorization in a series of paper published in KDD 2017 and NIPS 2018. We have notified the author and prevent mistakes in the future publication. Through the conversation with the authors, we think it is actually a mistake that very easy to commit if we don't pay attention to the implementation of machine learning package. In fact, these two paper have a total 80 citations and no one find this mistake. We will point out this mistake in the Matrix Factorization section.
+In this report, we focus on solving link prediction problems. The main difficulty of link prediction is to extract or generate features for each link for the machine learning algorithms to work. We surveyed several methods and categorized these methods into three categories in our proposal: heuristic method, latent feature method and subgraph sampling method.
+Due to the time limit, we haven't implemented subgraph sampling method by the time when we submitted the report. However, we've implemented heuristic method and latent feature method. Besides, we do several experiments on 8 different data sets and find several interesting facts. In addition, we find a mistake about the result of matrix factorization in a series of paper published in KDD 2017 and NIPS 2018. We have notified the author in prevention of mistakes in the future publication. Through the conversation with the authors, we find it a easily made mistake if we don't pay attention to the implementation of machine learning package. These two paper have 80 citations in total and no one found this mistake. We will point out this mistake in the Matrix Factorization section.
 \\ \\
-Our report will arrange in the following way. Chapter 2 is the introduction of our problem and Chapter 3 is a section of how to reproduce our result. Chapter 4 is some data analysis we've done do our data set. In Chapter 5, we wlll talk about some simple heuristic and our evaluation method. 
+Our report will be arranged in the following way. Chapter 2 is the introduction of our problem and Chapter 3 is a section regarding how to reproduce our result. Chapter 4 contains some data analysis we've done on our dataset. In Chapter 5, we will talk about some simple heuristics and our evaluation methods. 
 
 \section{Introduction to Link Prediction Problem}
-Link prediction is a task to predict whether there will be an edge between two nodes. Link prediction is actually very different from an usaual machine learning task by the following three characteristics:
+Link prediction is a task to predict whether there will be an edge between two nodes. Link prediction is actually very different from a usual machine learning task by the following three characteristics:
 \\ \\
 1. We don't have any feature vector predefined in our graph. 
 \\ \\
 2. Link prediction is a ranking problem.
 \\ \\
-3. The positive data is much more than the negative data. 
+3. The positive examples are much more than the negative . 
 \\  \\
-The first characteristics is seldom encounted when we face other machine learning problem which makes link prediction very unique.  \\
-To make link prediction a machine learning problem. There are three ways to generate(or learn) feature vector. \\
+The first characteristics is seldom encountered in machine learning problems, which makes link prediction very unique.  \\
+To make link prediction a machine learning problem. There are three ways to generate (or learn) feature vector. \\
 1. Heuristic \\ 
 This is the most simple way, but it is actually a very effective way. And there are some very famous heuristic such as common neighbors, Katz similarity, Preferentail Attachment, ... etc.  We will discuss this method from chapter 5 to chapter 7. \\ \\
 2. Latent Feature Method \\
-This method is to use factorization model(a.k.a Matrix Factorization) \cite{mf}. We give each node a latent feature vector and use the inner product be the probability whether the node will have the link. This method has a great performance in recommendation problem (link prediction in biparitite graph). We want to test wheter it will have the same great performance when it comes to a much more general link prediction problem. 
+This method is to use factorization model(a.k.a Matrix Factorization) \cite{mf}. We give each node a latent feature vector and use the inner product be the probability whether the node will have the link. This method has a great performance in recommendation problem (link prediction in biparitite graph). We want to test whether it will have the same great performance when it comes to a much more general link prediction problem. 
 \\
 We will discuss this method in Chapter 8.
 \\ \\
@@ -56,7 +56,7 @@ Subgraph Sampling approach is to sample a set of subgraph and enumerate all the 
 \\ 
 To illustrate the idea of subgraph sampling, let us draw an example in Figure \ref{fig:subsample}. 
 \\
-The second and third characteristic actually will let link prediction need to have an unique way to evaluate model and we will discuss this in Chapter 5.2. 
+The second and third characteristics will require that we use an unique way to evaluate models and we will discuss this in Chapter 5.2. 
 \\
 \begin{figure}[h]
 	\centering
@@ -72,12 +72,12 @@ We believe that reproducibility is very important when it comes to research. Thu
 \url{https://github.com/miamiasheep/Purdue\_ML\_Course\_Project}
 \\
 \\
-And all of our experiements can be reproduced by following the instruction of README. If you have any problems of reproducing the experiments, please feel free to contact me by posting an issue or sending me an email at lee3388@purude.edu.
+And all of our experiments can be reproduced by following the instruction of README. If you have any problems of reproducing the experiments, please feel free to contact me by posting an issue or sending me an email at lee3388@purdue.edu.
 
 \section{Data Analysis}
 
 \subsection {Data Set}
-We collect 8 different datasets which are all unique and have different characteristics. Table \ref{tab:info} shows basic statistics of each data set.
+We collected 8 different datasets which are all unique and have different characteristics. Table \ref{tab:info} shows basic statistics of each data set.
 \subsubsection{Facebook}
 This is a dataset downloaded from SNAP(Staford NEtwork Analysis Project)\cite{snapnets}. The data is an egonet in facebook. Each node represents an account in Facebook and each link represents friendship in Facebook.
 \subsubsection{Power}
@@ -159,6 +159,12 @@ It is the simplest baseline, which is just summing up the total size of neighbor
 It is assumed that a high degree node have more chances to have a link with other nodes. Preferential Attachment calculate the product of degree of x and y. It can be calculated as $|N(x)| * |N(y)|$
 \subsubsection{Page Rank(PG)}
 It is very similar to PA. But instead of using the product of nodes' degrees, it uses the product of two nodes' scores derived from performing page rank on our network. Since the product can be very small, we use the sum of logarithm instead. Let $r_x$ be the score of x after performing page rank and $r_y$ be the score of y after page rank. It can be calculated as $\log{r_x} + \log{r_y}$
+\subsubsection{Katz}
+The heuristic counts all the paths between given pair of nodes, with shorter paths counting more heavily. It can be calculated as $\sum_{l=1}^{\infty}\beta^l|paths_{xy}^{<l>}|$, where $\beta$ is a free parameter and $|paths_{xy}^{<l>}|$ is the number of paths between x and y at given length $l$. 
+\subsubsection{Random Walk with Restart (RWR)}
+It is an adaptation of PageRank algorithm. Consider random walker starting from node x and periodically, with probability $\alpha$, returning to $x$. Let $q_{x}$ be a stationary distribution of Markov chain describing this walker. From definition of stationary distribution: $q_{x} = (1-\alpha)P^Tq_{x} + \alpha e_{x}$, where $e_{x}$ is a unit vector with 1 on position corresponding to node x, and P is a transition matrix describing ordinary random walker. The RWR index is then defined as $q_{xy} + q_{yx}$, where $q_{xy}$ means the yth element of $q_{x}$. Since the sum can be very small, we use $\log {q_{xy}} + \log {q_{yx}}$
+
+
 \begin{table}
 	\begin{center}
 		\begin{tabular}{|c|c|}
@@ -170,7 +176,9 @@ It is very similar to PA. But instead of using the product of nodes' degrees, it
 			Adamic and Adar(AA) & $\sum_{z \in N(x) \cap N(y)}{\frac{1}{log(|N(z)|)}}$ \\
 			Total Neighbor(TN) & $|N(x)| + |N(y)|$ \\
 			Preferentail Attachment (PA) & $|N(x)| * |N(y)|$ \\
-			Page Rank(PR)  & $\log{r_x} + \log{r_y}$ \\	
+			Page Rank(PR)  & $\log{r_x} + \log{r_y}$ \\
+			Katz & $\sum_{l=1}^{\infty}\beta^l|paths_{xy}^{<l>}|$\\
+			Random Walk with Restart (RWR)& $\log {q_{xy}} + \log {q_{yx}}$\\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -194,7 +202,7 @@ Third, we train the models using training set, and tuned our model using validat
 We also implemented f1@k score as an evaluation metric. For the parameter k, we set the k equal to the size of positive samples. For this k, recall is actually equal to precision. And f1@k thus has a very intuitive physical meaning: the accuracy of finding all of the missing links given the size of missing links. In the future, we'll try to set different k's and see the influence of them. 
 \\
 \\
-Also, something to note here is that some nodes may only exist in validation or testing set but not in training set. We discarded the pairs of nodes where at least one node is not in the training set when evaluating, i.e., We only considered pairs of which both nodes are in the training set.
+Also, something to note here is that some nodes may only exist in validation or testing set but not in training set. We discarded the pairs of nodes where at least one node is not in the training set when evaluating, i.e., we only considered pairs of which both nodes are in the training set.
 
 
 \section{Result and Discussion of Heuristic Methods}
@@ -243,10 +251,10 @@ Also, something to note here is that some nodes may only exist in validation or 
 Table \ref{tab:auc} shows AUC's of the six different baselines and Table \ref{tab:f1} shows the F1 scores.
 \\
 \\
-According to the result above, we can see that no heuristic method can outperform all other heuristics, and that Adamic Adar(AA), Jaccard, and common neighbors perform pretty well in the Facebook and NS dataset. However, for Power and Router dataset, the results of common neighbor based methods are pretty bad. At first, we think the reason AA, Jaccard and common neighbors perform so bad because these three heuristic are not suitable for Power and Router data set. However, when we carefully anayze the predictions, we find AA, Jaccard and common neighbor is actually very good. The reason the performs bad in AUC and F1@(sample size) is because these data has a low average degree so there are many predictions are zero. When we see the result of precision@50, we will find that common neighbor, AA and Jaccard are actually very good in this evaluation.
+According to the result above, we can see that no heuristic can outperform all other heuristics, and that Adamic Adar(AA), Jaccard, and common neighbors perform pretty well in the Facebook and NS dataset. However, for Power and Router dataset, the results of common neighbor based methods are pretty bad. At first, we think the reason that AA, Jaccard and common neighbors perform so bad is because these three heuristics are not suitable for Power and Router data set. However, when we carefully analyzed the predictions, we found AA, Jaccard and common neighbor were actually very good for the high-ranking pairs. The reason why it performed not well in AUC and F1@(sample size) is because these data have a low average degree so that many predictions are zero. When we see the result of precision@50, we will find that common neighbor, AA and Jaccard are actually very good under this evaluation.
 \\
 \\
-To achieve a better result, we want to resort to machine learning approach. Instead of designing a heuristic before actually seeing the data, we want to train our model using the existing link in the training data. The main problem of machine learning approach is to find the feature vector for each node. 
+To achieve a better result, we resorted to machine learning approach.
 \begin{table}
 	\begin{center}
 		\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
@@ -281,10 +289,10 @@ First, we sampled the training set and testing set. We made both the sets class-
 Second, we employed logistic regression and randomforest for the problem. We used grid search and 3-fold cross validation to find the best parameters for the models.
 \\
 \\
-Third, we built the models with the best parameters for the testing set. We then got the probability of whether there is a link for each pair. One can see the probability as a score, just as what we obtained when using heuristics methods. The higher the score, the higher the ranking it gets. For now, we can employed AUC and F1 to inspect the model performance. Table \ref{tab:ensemble_auc} and Table \ref{tab:ensemble_f1} show the results.
+Third, we built the models with the best parameters for the testing set. We then got the probability of whether there is a link for each pair. One can see the probability as a score, just as what we obtained when using heuristics methods. The higher the score, the higher the ranking it gets. For now, we can employ AUC and F1 to inspect the model performances. Table \ref{tab:ensemble_auc} and Table \ref{tab:ensemble_f1} show the results.
 \\
 \\
-One can compare the results to those of the heuristics methods and find that the machine learning approach overall doesn't really outperform the heuristics methods. We think that it may be due to the fact that the machine learning approach tends to recommend higher order links, which may not be a good case for the dataset. Besides, we can see that the heuristics method already performed very well, especially the Random Walk with Restart (RWR) method. In fact, our randomforest models also suggested that RWR is the most important feature for almost every dataset. But still, machine learning approach has its own value. For the Router dataset, RWR doesn't seem to be a good method. This is where machine learning approach comes into play. It may be more robust and may be less dataset-variant. For the future work, we are interested in generating more heuristic features for the machine learning models and imposed some constraints on the models for better performance. 
+One can compare the results to those of the heuristics methods and find that the machine learning approach overall doesn't really outperform the heuristics methods. We think that it may be due to the fact that the machine learning approach relatively tends to recommend higher order links, which may not be a good case for the dataset. Besides, we can see that the heuristics method already performed very well, especially the Random Walk with Restart (RWR) method. In fact, our randomforest models also suggested that RWR is the most important feature for almost every dataset. But still, machine learning approach has its own value. For the Router dataset, RWR doesn't seem to be a good method. This is where machine learning approach comes into play. It may be more robust and may be less dataset-variant. For the future work, we are interested in generating more heuristic features for the machine learning models and imposed some constraints on the models for better performance. 
 
 
 \begin{table}
@@ -326,7 +334,7 @@ One can compare the results to those of the heuristics methods and find that the
 			\hline
 		\end{tabular}
 	\end{center}
-	\caption{F1 of the machine learning models}
+	\caption{F1@label size of the machine learning models}
 	\label{tab:ensemble_f1}
 \end{table}
 
