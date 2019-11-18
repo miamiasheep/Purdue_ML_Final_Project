@@ -32,11 +32,8 @@
 \section{Abstract}
 
 In this report, we focus on solving link prediction problems. The main difficulty of link prediction is to extract or generate features for each link for the machine learning algorithms to work. We surveyed several methods and categorized these methods into three categories in our proposal: heuristic method, latent feature method and subgraph sampling method.
-<<<<<<< HEAD
-Due to the time limit, we haven't implemented subgraph sampling method by the time when we submitted the report. However, we've implemented heuristic method and latent feature method. Besides, we do several experiments on 7 different datasets and find several interesting facts. In addition, we find a mistake about the result of matrix factorization in a series of paper published in KDD 2017 and NIPS 2018. We have notified the author in prevention of mistakes in the future publication. Through the conversation with the authors, we find it a easily made mistake if we don't pay attention to the implementation of machine learning package. These two papers have 80 citations in total and no one found this mistake. We will point out this mistake in the Matrix Factorization section.
-=======
-Due to the time limit, we haven't implemented subgraph sampling method by the time when we submitted the report. However, we've implemented heuristic method and latent feature method. Besides, we do several experiments on 7 different data sets and find several interesting facts. In addition, we find a mistake about the result of matrix factorization in a series of paper published in KDD 2017 and NIPS 2018. We have notified the author in prevention of mistakes in the future publication. Through the conversation with the authors, we find it a easily made mistake if we don't pay attention to the implementation of machine learning package. These two paper have 80 citations in total and no one found this mistake. We will point out this mistake in the Matrix Factorization section.
->>>>>>> e8eabb0439db104afb69a866ebefa2f235a0e24b
+\\ \\
+Due to the time limit, we haven't implemented subgraph sampling method by the time when we submitted the report. However, we've implemented heuristic method and latent feature method. Besides, we do several experiments on 7 different data sets and find several interesting facts. In addition, we find a mistake about the result of matrix factorization in a series of paper published in KDD 2017 and NIPS 2018. We have notified the author in prevention of mistakes in the future publication. Through the conversation with the authors, we find it a easily made mistake if we don't pay attention to the implementation of machine learning package. In fact, these two paper have 80 citations in total and no one found this mistake. We will point out this mistake in the Matrix Factorization section.
 \\ \\
 Our report will be arranged in the following way. Section 2 is the introduction of our problem and section 3 is a section regarding how to reproduce our result. Section 4 contains some data analysis we've done on our dataset. In section 5 to section 6, we will talk about some simple heuristics and our evaluation methods. In section 7, we will use logistic regression and random forest to ensemble the heuristic model. In section 8, we apply matrix factorization model to link prediction problem and point out mistakes that made in two papers. In section 9, we summarize all the interesting finding and make our conclusion.
 
@@ -47,11 +44,7 @@ Link prediction is a task to predict whether there will be an edge between two n
 \\ \\
 2. Link prediction is a ranking problem.
 \\ \\
-<<<<<<< HEAD
 3. The negative examples are much more than the positive. 
-=======
-3. The positive instance are much more than negative instance. 
->>>>>>> e8eabb0439db104afb69a866ebefa2f235a0e24b
 \\  \\
 The first characteristics is seldom encountered in machine learning problems, which makes link prediction very unique.  \\
 To make link prediction a machine learning problem. There are three ways to generate (or learn) feature vector. \\
@@ -83,31 +76,20 @@ We believe that reproducibility is very important when it comes to research. Thu
 \url{https://github.com/miamiasheep/Purdue\_ML\_Course\_Project}
 \\
 \\
-<<<<<<< HEAD
-And all of our experiments can be reproduced by following the instructions in README.md. If you have any problems of reproducing the experiments, please feel free to contact me by posting an issue or sending me email at lee3388@purdue.edu.
-
-\section{Data Analysis}
-
-\subsection {Dataset}
-We collected 7 different datasets which are all unique and have different characteristics. Table \ref{tab:info} shows basic statistics of each dataset.
-=======
 And all of our experiments can be reproduced by following the instruction of README. If you have any problems of reproducing the experiments, please feel free to contact us by posting an issue in the repository.
 
 \section{Data Analysis}
 
 \subsection {Data Set}
 We collected 7 different datasets which are all unique and have different characteristics. Table \ref{tab:info} shows basic statistics of each data set.
->>>>>>> e8eabb0439db104afb69a866ebefa2f235a0e24b
+
 \subsubsection{Facebook}
 This is a dataset downloaded from SNAP(Stanford Network Analysis Project)\cite{snapnets}. The data is an egonet in facebook. Each node represents an account in Facebook and each link represents friendship in Facebook.
 \subsubsection{Power}
 Power is an power grid of western US.\cite{small_world} For the power grid, nodes represents generators, transformers and substations, and links represent high-voltage transmission lines between them.
 \subsubsection{NS}
-<<<<<<< HEAD
 NS is a collaboration network of researchers who publish paper on network sciences \cite{Newman_2006}. The network maps coauthorships between 379 scientists whose research centers on the properties of networks of one kind or another, where each node represents an author in the network, and the link indicate coauthorships between the two authors.
-=======
-NS is a collaboration network of resarchers who publish paper on network sciences \cite{Newman_2006}.
->>>>>>> e8eabb0439db104afb69a866ebefa2f235a0e24b
+
 \subsubsection{Router}
 Router is a router-level Internet.\cite{router}Each node represents a router and each edge represents links between two networks, which identified by DNS names.
 \subsubsection{USAir}
@@ -146,11 +128,7 @@ We implemented a tool to visualize our datasets. And all of our visualization gr
 Since the network is too big and it is hard to find any clue regarding the network structure if we draw all the edges and nodes, we only sampled a small portion of the network on every dataset.
 \\
 \\
-<<<<<<< HEAD
-By visualizing our datasets, we can see that the characteristic of each data is actually very different. Let's take Facebook (figure\ref{fig:facebook}) and Router (figure\ref{fig:Router}) as examples. Facebook dataset has multiple triangles in the middle of the network. In contrast, Router has several star-stuctured networks.
-=======
 By visualizing our data sets, we can see that the characteristic of each data is actually very different. Let's take Facebook (figure\ref{fig:facebook}) and Router (figure\ref{fig:Router}) as examples. Facebook dataset has multiple triangles in the middle of the network. In contrast, Router has several star-stuctured networks.
->>>>>>> e8eabb0439db104afb69a866ebefa2f235a0e24b
 
 
 \begin{figure}[h]
@@ -232,17 +210,6 @@ Also, something to note here is that some nodes may only exist in validation or 
 	\begin{center}
 		\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
 			\hline
-<<<<<<< HEAD
-			Dataset & CN & JAC & AA & PA  & TN & PG \\
-			\hline
-			Celegan&0.8314&0.7669&0.8443&0.7554&0.734&0.7587\\
-			facebook&0.9882&0.9863&0.9893&0.8324&0.7345&0.8085\\
-			NS&0.9742&0.9747&0.9741&0.6803&0.5204&0.5206\\
-			Power&0.5965&0.5964&0.5965&0.528&0.5198&0.5536\\
-			Router&0.6109&0.6102&0.6111&0.9298&0.9198&0.9418\\
-			USAir&0.9509&0.9164&0.9626&0.9021&0.868&0.8971\\
-			Yeast&0.902&0.901&0.9029&0.8561&0.7926&0.8488\\
-=======
 			Data Set & CN & JAC & AA & PA  & TN & PG & Katz & RWR\\
 			\hline
 			Celegans&0.8415&0.7835&0.8566&0.7567&0.7318&0.7593&0.8416&0.8863\\
@@ -252,7 +219,6 @@ Also, something to note here is that some nodes may only exist in validation or 
 			Router&0.6119&0.6116&0.6119&0.9273&0.9152&0.9385&0.6756&0.717\\
 			USAir&0.9474&0.9118&0.9581&0.899&0.8616&0.8919&0.9323&0.9455\\
 			Yeast&0.902&0.9018&0.9029&0.8582&0.7945&0.8523&0.9678&0.9765\\
->>>>>>> e8eabb0439db104afb69a866ebefa2f235a0e24b
 			\hline
 		\end{tabular}
 	\end{center}
@@ -264,17 +230,6 @@ Also, something to note here is that some nodes may only exist in validation or 
 	\begin{center}
 		\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
 			\hline
-<<<<<<< HEAD
-			Dataset & CN & JAC & AA & PA & TN & PG \\
-			\hline
-			Celegan&0.7407&0.5926&0.713&0.5694&0.5787&0.5833\\
-			facebook&0.9546&0.9312&0.9544&0.6742&0.5618&0.6455\\
-			NS&0.9524&0.9524&0.9524&0.5281&0.3939&0.3723\\
-			Power&0.1947&0.1947&0.1947&0.396&0.3518&0.3252\\
-			Router&0.2279&0.2279&0.2279&0.761&0.7574&0.7721\\
-			USAir&0.8278&0.7608&0.8612&0.799&0.7799&0.7608\\
-			Yeast&0.815&0.815&0.815&0.7024&0.6184&0.6944\\
-=======
 			Data Set & CN & JAC & AA & PA & TN & PG & Katz & RWR \\
 			\hline
 			Celegans&0.8472&0.7269&0.8102&0.6944&0.6481&0.6991&0.7963&0.8148\\
@@ -284,7 +239,6 @@ Also, something to note here is that some nodes may only exist in validation or 
 			Router&0.2279&0.2279&0.2279&0.8346&0.8199&0.8382&0.6324&0.636\\
 			USAir&0.8995&0.8278&0.8947&0.8278&0.8278&0.8278&0.8517&0.9091\\
 			Yeast&0.815&0.815&0.815&0.7882&0.7364&0.7721&0.9392&0.9553\\
->>>>>>> e8eabb0439db104afb69a866ebefa2f235a0e24b
 			\hline
 		\end{tabular}
 	\end{center}
@@ -393,11 +347,8 @@ For example, the following equation is a example of using square error. \\
 \begin{equation}
 \min_{P,Q}{\sum_{(u,i)}{(R_{u,i}-P_uQ_i^T)^2}}
 \end{equation}
-<<<<<<< HEAD
-However, the link prediction goal is the ranking but not square error. Thus, we adopt Bayesian Personal Ranking\cite{bpr} in this problem. Denote $I_u^+$ is the node that has a link with node u and $I_u^-$ is the node that doesn't have a link with node u. And let $D_s$ be $\{(u,i,j)|i \in I_u^+, j \in I_u^-\}$. If we apply Bayesian Personal Ranking on Matrix Factorization, we will get equation \ref{eq:bprmf}.
-=======
 However, the link prediction goal is the ranking not square error. So, we adopt Bayesian Personal Ranking\cite{bpr} in this problem. Denote $I_u^+$ is the node that has a link with node u and $I_u^-$ is the node that doesn't have a link with node u. And let $D_s$ be $\{(u,i,j)|i \in I_u^+, j \in I_u^-\}$. If we apply Bayesian personal ranking on Matrix Factorization, we will get equation \ref{eq:bprmf}.
->>>>>>> e8eabb0439db104afb69a866ebefa2f235a0e24b
+
 \begin{equation}
 \min_{P,Q} \sum_{(u,i,j)\in D_s}\log(1+e^{-P_u(Q_i^T - Q_j^T)})
 \label{eq:bprmf}
@@ -406,15 +357,10 @@ However, the link prediction goal is the ranking not square error. So, we adopt 
 All of the implementation can be found in libmf\cite{libmf} and we directly use libmf in our experiment.
 
 \subsection{A Miastake Using Matrix Factorization}
-<<<<<<< HEAD
 We should be very careful when applying matrix factorization to solve link prediction problem.
 \\ \\
 When we survey related paper, we find that some papers use matrix factorization in a wrong way, and the mistake still exists in recent NIPS paper. The paper was accepted in KDD 2017 and then submitted in NIPS 2018 using this incorrect result and being accepted without noticing the bug. We then contact the author and find that we are the first to find this bug. Because these two papers already have over 80 citations in two year, we think it might be a bug that not so easy to find. So, we want to point out this mistake in the following section and our final project presentation.   
-=======
-We find that we should be very carefully when apply matrix factorization to solve link prediction problem.
-\\ \\
-When we survey related paper, we find that some paper use the matrix factorization in the wrong way. And the mistake is still existing in a very recent NIPS paper. The paper was accepted in KDD 2017 and then submitted in NIPS 2018 uses this incorrect result and being accepted without notice the bug. We then contact the author and  find that we are the first one to find this bug. Because this two paper already have over 80 citations in two year, we think it might be a bug that not so easy to find. So, we want to point out this mistake in the following section and our final project presentation.   
->>>>>>> e8eabb0439db104afb69a866ebefa2f235a0e24b
+
 
 \subsection{Zero Predictions Problem}
 Matrix Factorization is very popular in solving recommendation problem which can be one of link prediction problem. The only difference is that recommendation problem focus on the bipartite graph. 
@@ -451,17 +397,10 @@ The reason Matrix Factorization performs badly isn't because it's not suitable f
 	\label{tab:zero}
 \end{table}
 \subsection {Implementation of libMF}
-<<<<<<< HEAD
-To figure out why zero predictions problem happened, we read the source code of one of the famous matrix factorization package "libMF". The package performs stochastic gradient descent(if you use the default option). We describe the process in algorithm \ref{alg:mf}. (PS: It is a high level description of libMf, besides performing SGD, it actually do lots of optimizations using multi-threading.)
-\\
-\\
-The input format is [node1] [node2] [label]. [node1] is used as an instance in first latent matrix (P). [node2] is an instance in second latent matrix (Q). We can find it in the example of figure \ref{fig:wrong_mf}. The latent vector of Node 4 in P has no chance to be updated because node 4 only appear in the second position[node2]. And libMf set the intial matrix to zero matrix. Therefore, the latent vector of node 4 will become a zero vector. However, it is not reasonable, since there is actually a positive link related to node 4. This problem will happen even if we don't use Bayesian Personal Ranking. Node 4 only exists in the position of second node, so latent vector of node 4 will not be updated even if we use other optimization goal.
-=======
 To figure out why zero predictions problem happen, we read the source code of one of famous matrix factorization package "libMF". And what the package is do is to perform the following stochastic gradient descent(if you use the default option). We describe the process in algorithm \ref{alg:mf}. (PS: It is a very high level description of libmf, besides perform the SGD, it actually do lots of optimization using multi-threading.)
 \\
 \\
 The input format is [node1] [node2] [label]. [node1] is used as an instance in first latent matrix (P). [node2] is an instance in second latent matrix (Q). We will find that, in the example of figure \ref{fig:wrong_mf}. The latent vector of Node 4 in P has no chance to be updated because node 4 only appear in the second position[node2]. And libmf set the intial matrix to zero matrix. Therefore, the latent vector of node 4 will become a zero vector. However, it is not reasonable. Because there is actually a positive link related to node 4. This problem will happen even if we don't use bayesian personal ranking. Because node 4 only exists in the position of second node. The latent vector of node 4 will not be update even if we use other optimization goal.
->>>>>>> e8eabb0439db104afb69a866ebefa2f235a0e24b
 \begin{algorithm}
 	\caption{Matrix Factorization}
 	\begin{algorithmic}
@@ -489,11 +428,8 @@ The input format is [node1] [node2] [label]. [node1] is used as an instance in f
 \subsubsection{Duplicate data}
 The most simple way to solve the problem is to duplicate the training data. For each edge (x,y), we create a new edge (y,x) in the training set (Discribe in Figure \ref{fig:dup_mf}). It will solve the zero predictions problem. 
 \\ \\
-<<<<<<< HEAD
 Although it seems to be a small modification, it will lead to a significant improvement in most of the datasets.
-=======
-Although it seems to be a small modification, it will lead a significant improvement in most of the data set.
->>>>>>> e8eabb0439db104afb69a866ebefa2f235a0e24b
+\\ \\
 Table \ref{tab:dup} shows the improvement of doing this modification. MfWrong column is the result of wrong matrix factorization method and MfDup is the result of the matrix factorization using duplicate data. We can see that it helps a lot for the graph who has low average degree. 
 
 
@@ -532,7 +468,6 @@ We don't have to factorize the matrix into two matrices which will yield lots of
 \end{equation}
 
 \section{Summary}
-<<<<<<< HEAD
 In this report, we reimplement several models aims at tackle link prediction problem and apply these models to 7 datasets. We actually discover something interesting, and summarize them in this section.
 
 \subsection{Common Neighbors Is A Very Good Heuristic Model}
@@ -550,25 +485,7 @@ We find that nodes are much less probable to link with nodes that are far from t
 One of the state-of-the-art method is subgraph sampling which mentioned in section 2. A reason that it performs may because it won't recommend nodes that are far from the source nodes. 
 \subsection{Carefully Check Implmentation Is Very Important}
 If we didn't check the implementation of matrix factorization, we might think matrix factorization performs terribly. In fact, considering matrix factorization only need O(k)(k is the size of latent vector) time in prediction, matrix factorization is actually a terrific model in practice. It can achieve a decent performance with a good prediction speed.
-=======
-In this report, we reimplement several models aims at dealing with link prediction problem and apply these models to 8 data sets. And we actually find some interesting findings. We summarize these findings in this section.
 
-\subsection{Common Neighbor Is A Very Good Heuristic Model}
-We think it is actullay a very interesting finding. People argue that the machine learning model may be a better solution because they find no heuristic can perform equally well on every data set. Common neighbor may be more suitable for data that has multiple triangle such as Facebook, preferential attachment is more suitable for data that have a lot of star structured such as Router data set. 
-\\ \\
-However, according to our experiment, it may not tell the whole story. Common neighbor seems to perform bad in Router data set. However, It is not because common neighbor is not suitable for data set containing lots of star structured. One of the reason common neighbor performs bad in router data set is because lots of pairs don't have common neighbor and generate the same zero predictions. It will let the result of AUC of common neighbors become really bad. However, common neighbor actually have a very good performance in term of precision@50 even if apply to Router or Power data set.
-\\ \\
-When it comes to recommendation system, Precision@(small k) is actually a very important metric. However, we see there are few paper of link prediction use precision@(small k) as evaluation metric. We guess that one of the reason may be that it is hard to make an improvement because common neighbor is already very good. 
-
-\subsection{Ensemble Heuristic Directly May Not Be A Good Approach}
-We have ensembled 8 ensemble heuristic using random forest and logistic regression in section 7. At the beginning, we think it will at least yield a result better than all of the heuristics. However, it doesn't happen. 
-\\ \\
-However, we find that nodes are extremely less likely to have a link with nodes that are far from with them. We first discover the fact when we perform katz on eight different data set. When we do the grid search, we find the best $\beta$ tend to very small(ex: $10^-7$). Ensemble heuristic let our model have more chance to predict nodes that are far away from each other because we have total neighbors and preferential attachent in the feature vectors. And in fact, we have try to remove these two features and the performance seems to be slightly better.  
-\\ \\
-One of the state of the art method is subgraph sampling which we mentions in the section 2. We think that one of the reason this method performs so good could be that it will not recommend nodes that are far from the source nodes. 
-\subsection{Carefully Check Implmentation Is Very Important}
-If we don't check the implementation of matrix facotorization, we may think matrix factorization performs really bad. However, matrix factorization is actually not that bad. In fact, considering matrix factorization only need O(k)(k is the size of latent vector) time in the prediction, matrix factorization is actually a very good model in practice. It can achieve a decent performance with a good prediction speed.
->>>>>>> e8eabb0439db104afb69a866ebefa2f235a0e24b
 
 \bibliographystyle{acm}
 \bibliography{final_report}
