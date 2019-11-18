@@ -30,7 +30,6 @@
 \maketitle
 
 \section{Abstract}
-
 In this report, we focus on solving link prediction problems. The main difficulty of link prediction is to extract or generate features for each link for the machine learning algorithms to work. We surveyed several methods and categorized these methods into three categories in our proposal: heuristic method, latent feature method and subgraph sampling method.
 \\ \\
 Due to the time limit, we haven't implemented subgraph sampling method by the time when we submitted the report. However, we've implemented heuristic method and latent feature method. Besides, we do several experiments on 7 different data sets and find several interesting facts. In addition, we find a mistake about the result of matrix factorization in a series of paper published in KDD 2017 and NIPS 2018. We have notified the author in prevention of mistakes in the future publication. Through the conversation with the authors, we find it a easily made mistake if we don't pay attention to the implementation of machine learning package. In fact, these two paper have 80 citations in total and no one found this mistake. We will point out this mistake in the Matrix Factorization section.
@@ -348,7 +347,6 @@ For example, the following equation is a example of using square error. \\
 \min_{P,Q}{\sum_{(u,i)}{(R_{u,i}-P_uQ_i^T)^2}}
 \end{equation}
 However, the link prediction goal is the ranking not square error. So, we adopt Bayesian Personal Ranking\cite{bpr} in this problem. Denote $I_u^+$ is the node that has a link with node u and $I_u^-$ is the node that doesn't have a link with node u. And let $D_s$ be $\{(u,i,j)|i \in I_u^+, j \in I_u^-\}$. If we apply Bayesian personal ranking on Matrix Factorization, we will get equation \ref{eq:bprmf}.
-
 \begin{equation}
 \min_{P,Q} \sum_{(u,i,j)\in D_s}\log(1+e^{-P_u(Q_i^T - Q_j^T)})
 \label{eq:bprmf}
@@ -360,7 +358,6 @@ All of the implementation can be found in libmf\cite{libmf} and we directly use 
 We should be very careful when applying matrix factorization to solve link prediction problem.
 \\ \\
 When we survey related paper, we find that some papers use matrix factorization in a wrong way, and the mistake still exists in recent NIPS paper. The paper was accepted in KDD 2017 and then submitted in NIPS 2018 using this incorrect result and being accepted without noticing the bug. We then contact the author and find that we are the first to find this bug. Because these two papers already have over 80 citations in two year, we think it might be a bug that not so easy to find. So, we want to point out this mistake in the following section and our final project presentation.   
-
 
 \subsection{Zero Predictions Problem}
 Matrix Factorization is very popular in solving recommendation problem which can be one of link prediction problem. The only difference is that recommendation problem focus on the bipartite graph. 
@@ -486,6 +483,14 @@ One of the state-of-the-art method is subgraph sampling which mentioned in secti
 \subsection{Carefully Check Implmentation Is Very Important}
 If we didn't check the implementation of matrix factorization, we might think matrix factorization performs terribly. In fact, considering matrix factorization only need O(k)(k is the size of latent vector) time in prediction, matrix factorization is actually a terrific model in practice. It can achieve a decent performance with a good prediction speed.
 
+\subsection{Ensemble Heuristic Directly May Not Be A Good Approach}
+We have ensembled 8 ensemble heuristic using random forest and logistic regression in section 7. At the beginning, we think it will at least yield a result better than all of the heuristics. However, it doesn't happen. 
+\\ \\
+However, we find that nodes are extremely less likely to have a link with nodes that are far from with them. We first discover the fact when we perform katz on eight different data set. When we do the grid search, we find the best $\beta$ tend to very small(ex: $10^-7$). Ensemble heuristic let our model have more chance to predict nodes that are far away from each other because we have total neighbors and preferential attachent in the feature vectors. And in fact, we have try to remove these two features and the performance seems to be slightly better.  
+\\ \\
+One of the state of the art method is subgraph sampling which we mentions in the section 2. We think that one of the reason this method performs so good could be that it will not recommend nodes that are far from the source nodes. 
+\subsection{Carefully Check Implmentation Is Very Important}
+If we don't check the implementation of matrix facotorization, we may think matrix factorization performs really bad. However, matrix factorization is actually not that bad. In fact, considering matrix factorization only need O(k)(k is the size of latent vector) time in the prediction, matrix factorization is actually a very good model in practice. It can achieve a decent performance with a good prediction speed.
 
 \bibliographystyle{acm}
 \bibliography{final_report}
