@@ -481,7 +481,7 @@ We find that nodes are much less probable to link with nodes that are far from t
 \\ \\
 One of the state-of-the-art method is subgraph sampling which mentioned in section 2. A reason that it performs may because it won't recommend nodes that are far from the source nodes. 
 \subsection{Carefully Check Implmentation Is Very Important}
-If we didn't check the implementation of matrix factorization, we might think matrix factorization performs terribly. In fact, considering matrix factorization only need O(k)(k is the size of latent vector) time in prediction, matrix factorization is actually a terrific model in practice. It can achieve a decent performance with a good prediction speed.
+If we didn't check the implementation of matrix factorization, we might think matrix factorization performs terribly. However, matrix factorization actually have a decent performance if we use the model in the correct way. Besides, considering matrix factorization only need O(k)(k is the size of latent vector) time in prediction, matrix factorization is actually a terrific model in practice. It can achieve a decent performance with a good prediction speed.
 
 \bibliographystyle{acm}
 \bibliography{final_report}
